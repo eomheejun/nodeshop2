@@ -19,7 +19,7 @@ app.use("/orders", orderRoute);
 
 const dbUrl = "mongodb+srv://heejun:joon9759@cluster0-9oxxu.mongodb.net/test?retryWrites=true&w=majority";
 
-mongoose.connect(dbUrl, {useNewUrlParser:true, useCreateIndex:true})
+mongoose.connect(dbUrl, {useNewUrlParser:true, useCreateIndex:true})//옵션
     .then(() => console.log("mongodb connected .. "))
     .catch(err => console.log(err));
 
