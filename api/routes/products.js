@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const productModel = require("../models/products");
 
 router.get('/', (req, res) => {
     res.json({
@@ -9,14 +10,30 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
 
-    const title = req.body.title;
-    const desc = req.body.desc;
-
-    res.json({
-        msg: "successful product post",
-        title: title,
-        desc: desc
+    const product = new productModel({
+        name: req.body.name,
+        price: req.body.price
     });
+
+    product
+        .save()
+        .then(result => {
+            console.log(result);
+            res.status(201).json({
+                msg: "successful product post get",
+                createdProduct: result
+            });
+        })
+
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
+
+
+
 });
 
 router.patch('/', (req, res) => {
