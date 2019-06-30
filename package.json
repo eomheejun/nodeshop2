@@ -1,0 +1,24 @@
+{
+  "name": "nodeshop2",
+  "version": "1.0.0",
+  "description": "test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eomheejun/nodeshop2.git"
+  },
+  "keywords": [
+    "nodejs",
+    "javascript",
+    "express"
+  ],
+  "author": "eomheejun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eomheejun/nodeshop2/issues"
+  },
+  "homepage": "https://github.com/eomheejun/nodeshop2#readme"
+}
