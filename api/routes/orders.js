@@ -7,4 +7,21 @@ router.get('/', (req, res) => {
     });
 });
 
+router.post('/', (req, res) => {
+    res.json({
+        msg: "successful orders post"
+    });
+});
+
+router.patch('/', (req, res) => {
+    res.json({
+        msg: "successful orders patch"
+    });
+});
+
+router.delete('/', (req, res) => {
+    res.json({
+        msg: "successful orders delete"
+    });
+});
 module.exports = router;
