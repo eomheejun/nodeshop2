@@ -3,9 +3,19 @@ const router = express.Router();
 const productModel = require("../models/products");
 
 router.get('/', (req, res) => {
-    res.json({
-        msg : "successful product get"
-    });
+
+    productModel
+        .find()
+        .exec()
+        .then(docs => {
+            res.status(200).json(docs);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                err: err
+            });
+        });
 });
 
 router.post('/', (req, res) => {
