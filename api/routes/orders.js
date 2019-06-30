@@ -8,8 +8,12 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+
+    const cash = req.body.cash;
+    
     res.json({
-        msg: "successful orders post"
+        msg: "successful orders post",
+        cashinfo: cash
     });
 });
 
@@ -24,4 +28,5 @@ router.delete('/', (req, res) => {
         msg: "successful orders delete"
     });
 });
+
 module.exports = router;
