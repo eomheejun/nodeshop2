@@ -34,7 +34,7 @@ router.get('/:productId', (req,res) => {
             }
         })
         .catch(err => {
-            console.log(500);
+            console.log(err);
             res.status(500).json({
                 error: err
             })
