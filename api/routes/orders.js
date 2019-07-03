@@ -45,8 +45,8 @@ router.get('/orderId',(req, res) => {
 router.post('/', (req, res) => {
     
     const order = new orderModel({
-        name = req.body.name,
-        price = req.body.price
+        name: req.body.name,
+        price: req.body.price
     });
 
     order
