@@ -51,7 +51,7 @@ router.post('/', (req, res) => {
 
     order
         .save()
-        .then(docs =>{
+        .then(result =>{
             res.status(200).json({
                 msg: "success",
                 createdOrder: result
