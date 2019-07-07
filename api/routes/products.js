@@ -8,7 +8,22 @@ router.get('/', (req, res) => {
         .find()
         .exec()
         .then(docs => {
-            res.status(200).json(docs);
+            //res.status(200).json(docs);
+            const response = {
+                count: docs.length,
+                products: docs.map(doc => {
+                    return{
+                        name: doc.name,
+                        price: doc.price,
+                        _id: doc._id,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:3000/products/"+doc._id
+                        }
+                    };    
+                })
+            };
+            res.status(200).json(response);
         })
         .catch(err => {
             console.log(err);
@@ -30,7 +45,13 @@ router.get('/:productId', (req,res) => {
                 });
                     
             }else{
-                res.status(200).json(doc);
+                res.status(200).json({
+                    product: doc,
+                    request: {
+                        type: "GET",
+                        url: 'http://localhost:3000/products'
+                    }
+                });
             }
         })
         .catch(err => {
@@ -54,7 +75,15 @@ router.post('/', (req, res) => {
             console.log(result);
             res.status(201).json({
                 msg: "successful product post get",
-                createdProduct: result
+                createdProduct: {
+                    name:result.name,
+                    price:result.price,
+                    _id: result._id,
+                    request: {
+                        type:"GET",
+                        url:"http://localhost:3000/products/" + result._id
+                    }
+                }
             });
         })
 
@@ -69,10 +98,38 @@ router.post('/', (req, res) => {
 
 });
 
-router.patch('/', (req, res) => {
-    res.json({
-        msg: "successful product patch"
-    });
+router.patch('/:productId', (req, res) => {
+
+    const id=req.params.productId;
+    const updateOps = {};//수정할 내용을 저장해놓는곳 
+    for(const ops of req.body){//req.body=사용자 입력값 name과 price
+        updateOps[ops.propName] = ops.value; 
+    }
+
+    productModel
+        .update({_id:id}, {$set: updateOps})
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                msg:'product updated',
+                request: {
+                    type:'Get',
+                    url:"http://localhost:3000/products/" + id
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        })
+
+
+    //res.json({
+        //msg: "successful product patch"
+    //});
+
 });
 
 router.delete('/:productId', (req, res) => {
@@ -84,7 +141,11 @@ router.delete('/:productId', (req, res) => {
         .then(result => {
             res.status(200).json({
                 msg: "successful delete product",
-                result: result
+                result: result,
+                request : {
+                    type:"GET",
+                    url:"http://localhost:3000/products/" + result._id
+                }
             });
         })
         .catch(err => {
