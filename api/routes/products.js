@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
         .then(docs => {
             //res.status(200).json(docs);
             const response = {
-                count: docs.length,
+                count: docs.length,//화면상에 보여주는 지표 데이터 갯수가 몇개인지
                 products: docs.map(doc => {
                     return{
                         name: doc.name,
