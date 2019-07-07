@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");//npm install bcryptjs =>비밀번호를 암호화해줌
+const jwt = require("jsonwebtoken");//로그인을하면 토큰을 발행 토큰이 있어야지 활동가능
 const mongoose = require("mongoose");
 const userModel = require("../models/users");
 
@@ -59,7 +60,40 @@ router.post("/signup", (req, res) => {//signup으로 들어감
 
 //log in
 router.post("/login", (req, res) => {
+    userModel
+        .find({email:req.body.email})
+        .then(user => {
+            if(user.length < 1){
+                return res.status(200).json({
+                   msg:"등록되지 않은 회원"
+               });
+            }else{
+                bcrypt.compare(req.body.password, user[0].password, (err, result) =>{
+                    if(err){
+                        return res.status(401).json({
+                            msg:"password 틀림"
+                        });
+                    }else{
 
+                        const token = jwt.sign({
+                            email: user[0].email,
+                            userId: user[0]._id
+                        },
+                        "secret", {expiresIn: "1h"}
+                        );
+                        return res.status(200).json({
+                            msg:"successful",
+                            token: token
+                        });
+                    }
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).json({
+                error:err
+            });
+        });
 });
 
 module.exports = router;
