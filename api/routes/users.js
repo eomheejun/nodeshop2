@@ -7,6 +7,7 @@ const userModel = require("../models/users");
 
 //sign up 
 router.post("/signup", (req, res) => {//signup으로 들어감
+    
 
 
     userModel

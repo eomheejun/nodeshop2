@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require("mongoose");
+const checkAuth = require('../middleware/check-auth');
 
 
 const orderModel = require("../models/orders");
 const productModel = require("../models/products");
 
 
-router.get('/', (req, res) => {
+router.get('/', checkAuth,(req, res) => {
 
     orderModel
         .find()
@@ -127,11 +128,31 @@ router.post('/', (req, res) => {
     //     });
 });
 
-router.patch('/', (req, res) => {
-    res.json({
-        msg: "successful orders patch"
+router.patch('/:orderId', (req, res) => {
+    const id = req.params.orderId;
+    const updateOps = {};
+    for(const ops of req.body){
+        updateOps[ops.propName] = ops.value;   
+    }
+
+    orderModel
+        .update({_id:id}, {$set:updateOps})
+        .exec()
+        .then(result => {
+            res.status(200).json({
+                msg:"order update",
+                request:{
+                    type: "GET",
+                    url: "http:/localhost:3000/orders/" + id
+                }
+            });
+        })
+        .catch(err => {
+            res.status(500).json({
+                error:err
+            });
+        })
     });
-});
 
 router.delete('/:orderId', (req, res) => {
     const id = req.params.orderId;
